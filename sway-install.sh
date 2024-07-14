@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Exit on error and ensure errors in pipelines are caught
+set -e
+set -o pipefail
+
+# Check if the script is being run as root
+echo "Checking if you are root..."
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root" >&2
     exit 1
