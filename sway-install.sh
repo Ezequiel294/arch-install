@@ -51,19 +51,22 @@ if [ "$is_virtualbox" != "not found" ]; then
     systemctl enable vboxservice.service
 else
     echo "Physical hardware detected. Checking for specific hardware..."
-    gpu_info=$(lspci | grep -E "VGA|3D|2D")
-    if echo "$gpu_info" | grep -iq "nvidia"; then
-        echo "NVIDIA GPU detected. Installing drivers..."
-        pacman -S --needed --noconfirm nvidia nvidia-utils nvidia-settings
-    elif echo "$gpu_info" | grep -iq "amd"; then
-        echo "AMD GPU detected. Installing drivers..."
-        pacman -S --needed --noconfirm xf86-video-amdgpu vulkan-radeon
-    elif echo "$gpu_info" | grep -iq "intel"; then
-        echo "Intel GPU detected. Installing drivers..."
-        pacman -S --needed --noconfirm intel-ucode mesa vulkan-intel
-    else
-        echo "No specific GPU detected. Skipping GPU-specific installations."
-    fi
+    IFS=$'\n' # Change the Internal Field Separator to newline to correctly iterate over lines
+    for gpu_info in $(lspci | grep -E "VGA|3D|2D"); do
+        if echo "$gpu_info" | grep -iq "nvidia"; then
+            echo "NVIDIA GPU detected. Installing drivers..."
+            pacman -S --needed --noconfirm nvidia nvidia-utils nvidia-settings
+        elif echo "$gpu_info" | grep -iq "amd"; then
+            echo "AMD GPU detected. Installing drivers..."
+            pacman -S --needed --noconfirm xf86-video-amdgpu vulkan-radeon
+        elif echo "$gpu_info" | grep -iq "intel"; then
+            echo "Intel GPU detected. Installing drivers..."
+            pacman -S --needed --noconfirm mesa vulkan-intel
+        else
+            echo "No specific GPU detected. Skipping GPU-specific installations."
+        fi
+    done
+    IFS=' ' # Reset the Internal Field Separator to default
 
     cpu_info=$(grep -m 1 'model name' /proc/cpuinfo)
     if echo "$cpu_info" | grep -iq "intel"; then
