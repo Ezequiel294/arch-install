@@ -103,7 +103,7 @@ echo "Packages installed."
 
 # Enable sudo
 echo "Enabling sudo..."
-sed -i '/^# %wheel ALL=\(ALL\) ALL/s/^# //' /etc/sudoers
+sed -i '/^# %wheel ALL=\(ALL\) ALL/s/^# //' /etc/sudoers # TODO: fix sudoers file not being properly uncommented
 echo "Sudo enabled."
 
 # Set the locale
