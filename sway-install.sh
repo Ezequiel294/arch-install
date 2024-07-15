@@ -12,6 +12,15 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 echo "You are root. Proceeding with installation..."
 
+echo "To set the time zone, you need to know your region and city. You can find your region by running timedatectl list-timezones"
+read -p "Do you want to run 'timedatectl list-timezones'? (y/n): " answer
+if [[ $answer =~ ^[Yy]$ ]]; then
+    timedatectl list-timezones
+fi
+read -p "Enter your region: " region
+echo
+read -p "Enter your city: " city
+echo
 read -sp "Enter the password for root: " root_password
 echo
 read -p "Enter the username you want to create: " username
@@ -23,7 +32,7 @@ echo
 
 # Set the time zone
 echo "Setting the time zone..."
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+ln -sf /usr/share/zoneinfo/$region/$city /etc/localtime
 hwclock --systohc
 echo "Time zone set."
 
@@ -94,7 +103,7 @@ echo "Packages installed."
 
 # Enable sudo
 echo "Enabling sudo..."
-sed -i '/^# %wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
+sed -i '/^# %wheel ALL=\(ALL\) ALL/s/^# //' /etc/sudoers
 echo "Sudo enabled."
 
 # Set the locale
