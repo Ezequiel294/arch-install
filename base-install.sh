@@ -103,7 +103,7 @@ echo "Packages installed."
 
 # Enable sudo
 echo "Enabling sudo..."
-sed -i '/^# %wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
+sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 echo "Sudo enabled."
 
 # Set the locale
@@ -132,13 +132,13 @@ echo "Enabling services..."
 systemctl enable NetworkManager bluetooth
 echo "Services enabled."
 
-# Post-install config
-echo "Post-install configuration..."
-echo "Switching to user $username..."
-su $username
-cd
-echo "Running post-install script..."
-bash Scripts/Arch/post-install.sh
-echo "Post-install configuration complete."
 
+# Clone my dotfiles
+echo "Moving to $username's home directory..."
+cd /home/$username
+echo "Installing dotfiles..."
+git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles
+git --git-dir /home/$username/.dotfiles/ --work-tree /home/$username checkout --force
 echo "Installation complete."
+
+echo "Reboot and run the post-install script in your home directory."
