@@ -98,12 +98,12 @@ echo "Hardware detected and set up."
 
 # Install necessary packages
 echo "Installing necessary packages..."
-pacman -S --needed --noconfirm alacritty base-devel breeze-grub grub efibootmgr ly networkmanager pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack bluez bluez-utils reflector sudo git neovim sway swaylock swayidle swaybg wofi firefox
+pacman -S --needed --noconfirm base-devel grub efibootmgr networkmanager pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack bluez bluez-utils sudo
 echo "Packages installed."
 
 # Enable sudo
 echo "Enabling sudo..."
-sed -i '/^# %wheel ALL=\(ALL\) ALL/s/^# //' /etc/sudoers # TODO: fix sudoers file not being properly uncommented
+sed -i '/^# %wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
 echo "Sudo enabled."
 
 # Set the locale
@@ -129,5 +129,16 @@ echo "Network configured."
 
 # Enable services
 echo "Enabling services..."
-systemctl enable NetworkManager bluetooth ly
+systemctl enable NetworkManager bluetooth
 echo "Services enabled."
+
+# Post-install config
+echo "Post-install configuration..."
+echo "Switching to user $username..."
+su $username
+cd
+echo "Running post-install script..."
+bash Scripts/Arch/post-install.sh
+echo "Post-install configuration complete."
+
+echo "Installation complete."
