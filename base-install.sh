@@ -14,15 +14,17 @@ echo -e "\nYou are root. Proceeding with installation...\n"
 
 # Set the root password, username, and hostname
 read -sp "Enter the password for root: " root_password
+echo
 read -p "Enter the username you want to create: " username
 read -sp "Enter the password for $username: " user_password
+echo
 read -p "Enter the host name: " hostname
 
 # Set timezone
 echo -e "\nTo set the time zone, you need to know your region and city." 
 echo "You can find your region and city by running timedatectl list-timezones"
 read -p "Do you want to run 'timedatectl list-timezones'? (Y/n): " answer
-if [[ $answer =~ ^[Yy\n]$ ]]; then
+if [[ $answer =~ ^[Yy]$ ]]; then
     timedatectl list-timezones
 fi
 read -p "Enter your region: " region
@@ -136,10 +138,9 @@ echo "Services enabled."
 echo -e "\nMoving to $username's home directory..."
 cd /home/$username
 echo -e "\nInstalling dotfiles..."
-git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles
-git --git-dir /home/$username/.dotfiles/ --work-tree /home/$username checkout --force
+su -c "git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles" $username
+su -c "git --git-dir=/home/$username/.dotfiles/ --work-tree=/home/$username checkout --force" $username
 echo "Installation complete."
 
 echo -e "\nReboot and run the post-install script in your home directory."
-echo "The script is located at /home/$username/Scripts/Arch/post-install.sh"
-
+echo "The script is located at /home/$username/Scripts/post-install.sh"
