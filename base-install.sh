@@ -70,13 +70,13 @@ else
     for gpu_info in $(lspci | grep -E "VGA|3D|2D"); do
         if echo "$gpu_info" | grep -iq "nvidia"; then
             echo "NVIDIA GPU detected. Installing drivers..."
-            pacman -S --needed --noconfirm nvidia nvidia-utils nvidia-settings mesa
+            pacman -S --needed --noconfirm  mesa vulkan-nouveau vulkan-tools
         elif echo "$gpu_info" | grep -iq "amd"; then
             echo "AMD GPU detected. Installing drivers..."
-            pacman -S --needed --noconfirm mesa libva-mesa-driver xf86-video-amdgpu vulkan-radeon
+            pacman -S --needed --noconfirm mesa vulkan-radeon vulkan-tools
         elif echo "$gpu_info" | grep -iq "intel"; then
             echo "Intel GPU detected. Installing drivers..."
-            pacman -S --needed --noconfirm mesa vulkan-intel
+            pacman -S --needed --noconfirm mesa vulkan-intel vulkan-tools
         else
             echo "No specific GPU detected. Skipping GPU-specific installations."
         fi
@@ -123,10 +123,10 @@ echo "GRUB configuration generated."
 
 # Network configuration
 echo -e "\nConfiguring network..."
-echo $hostname >/etc/hostname
+echo $hostname > /etc/hostname
 echo "127.0.0.1 localhost
 ::1       localhost
-127.0.1.1 $hostname.localhost $hostname" | tee /etc/hosts >/dev/null
+127.0.1.1 $hostname.localhost $hostname" | tee /etc/hosts > /dev/null
 echo "Network configured."
 
 # Enable services
@@ -140,7 +140,7 @@ cd /home/$username
 echo -e "\nInstalling dotfiles..."
 su -c "git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles" $username
 su -c "git --git-dir=/home/$username/.dotfiles/ --work-tree=/home/$username checkout --force" $username
-echo "Installation complete."
+echo -e "\nInstallation complete."
 
 echo -e "\nReboot and run the post-install script in your home directory."
 echo "The script is located at /home/$username/Scripts/post-install.sh"
