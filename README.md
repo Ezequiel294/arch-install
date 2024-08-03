@@ -59,7 +59,7 @@ cfdisk
 
 7. Format the partitions with the following commands with the following format:
 mkfs.*format* /dev/*partition*
-the EFI should have a FAT22 format, the root can have your preferred format, and the swap should have a swap format
+the EFI should have a FAT32 format, the root can have your preferred format, and the swap should have a swap format
 
 8. Mount the partitions
 > [!NOTE]
