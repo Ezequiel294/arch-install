@@ -1,6 +1,5 @@
 # Index
 
-- [Index](#index)
 - [Overview](#overview)
 - [List of Requirements](#list-of-requirements)
 - [Arch Installation](#arch-installation)
@@ -54,8 +53,8 @@ lsblk
 ```bash
 cfdisk
 ```
-   > [!NOTE]
-   > If more than one disk is available, you should select the correct disk to partition: cfdisk /dev/*disk*
+> [!NOTE]
+> If more than one disk is available, you should select the correct disk to partition: cfdisk /dev/*disk*
 
 
 7. Format the partitions with the following commands with the following format:
@@ -63,12 +62,12 @@ mkfs.*format* /dev/*partition*
 the EFI should have a FAT22 format, the root can have your preferred format, and the swap should have a swap format
 
 8. Mount the partitions
-   > [!NOTE]
-   > Root partition should be mounted to /mnt
-   > EFI partition should be mounted to /mnt/boot
-   > If using a swap partition, you should enable it with the following command: swapon /dev/*swap_partition*
-   >
-   > If using btrfs, you should mount the subvolumes too
+> [!NOTE]
+> Root partition should be mounted to /mnt
+> EFI partition should be mounted to /mnt/boot
+> If using a swap partition, you should enable it with the following command: swapon /dev/*swap_partition*
+>
+> If using btrfs, you should mount the subvolumes too
 
 9. Check you have internet
 
