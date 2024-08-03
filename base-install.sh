@@ -10,7 +10,7 @@ if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root" >&2
     exit 1
 fi
-echo "You are root. Proceeding with installation...\n"
+echo -e "You are root. Proceeding with installation...\n"
 
 # Set the root password, username, and hostname
 read -sp "Enter the password for root: " root_password
