@@ -5,12 +5,12 @@ set -e
 set -o pipefail
 
 # Check if the script is being run as root
-echo "Checking if you are root..."
+echo -e "\nChecking if you are root..."
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root" >&2
     exit 1
 fi
-echo -e "\nYou are root. Proceeding with installation...\n"
+echo "You are root. Proceeding with installation...\n"
 
 # Set the root password, username, and hostname
 read -sp "Enter the password for root: " root_password
@@ -77,7 +77,6 @@ if [ "$is_virtualbox" != "not found" ]; then
     pacman -S --needed --noconfirm virtualbox-guest-utils
     systemctl enable vboxservice.service
     echo "VirtualBox Guest Additions installed."
-fi
 else
     echo "Physical hardware detected. Checking for specific hardware..."
     cpu_info=$(grep -m 1 'model name' /proc/cpuinfo)
