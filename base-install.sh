@@ -71,39 +71,12 @@ echo "Pacman configured."
 # Hardware detection and conditional package installation
 echo -e "\nDetecting hardware..."
 # Detect VirtualBox
-is_virtualbox=$(lspci | grep -i "VirtualBox" || echo "not found")
+is_virtualbox=$(grep -i "$1" /proc/scsi/scsi || echo "not found")
 if [ "$is_virtualbox" != "not found" ]; then
     echo "VirtualBox environment detected. Installing VirtualBox Guest Additions..."
     pacman -S --needed --noconfirm virtualbox-guest-utils
     systemctl enable vboxservice.service
     echo "VirtualBox Guest Additions installed."
-fi
-# Detect VMware
-is_vmware=$(lspci | grep -i "VMware" || echo "not found")
-if [ "$is_vmware" != "not found" ]; then
-    echo "VMware environment detected. Installing VMware Tools..."
-    pacman -S --needed --noconfirm open-vm-tools
-    systemctl enable vmtoolsd.service
-    systemctl enable vmware-vmblock-fuse.service
-    echo "VMware Tools installed."
-fi
-# Detect Hyper-V
-is_hyperv=$(dmesg | grep -i "Hypervisor detected" || echo "not found")
-if [ "$is_hyperv" != "not found" ]; then
-    echo "Hyper-V environment detected. Installing Hyper-V Tools..."
-    pacman -S --needed --noconfirm hyperv
-    systemctl enable hv_fcopy_daemon.service
-    systemctl enable hv_kvp_daemon.service
-    systemctl enable hv_vss_daemon.service
-    echo "Hyper-V Tools installed."
-fi
-# Detect QEMU
-is_qemu=$(dmesg | grep -i "QEMU" || echo "not found")
-if [ "$is_qemu" != "not found" ]; then
-    echo "QEMU environment detected. Installing QEMU Guest Agent..."
-    pacman -S --needed --noconfirm qemu-guest-agent
-    systemctl enable qemu-ga.service
-    echo "QEMU Guest Agent installed."
 fi
 else
     echo "Physical hardware detected. Checking for specific hardware..."
