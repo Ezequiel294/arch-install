@@ -25,7 +25,7 @@ read -p "Do you want to create a swap file? (Y/n): " answer
 if [[ $answer =~ ^[Yy]$ ]]; then
     read -p "Enter the size of the swap file in GB: " swap_size
     echo -e "\nCreating swap file..."
-    mkswap -U clear --size ${swap_size}G /swapfile
+    mkswap -U clear --size ${swap_size}G --file /swapfile
     swapon /swapfile
     echo -e '\n/swapfile none swap defaults 0 0' | tee -a /etc/fstab
     echo "Swap file created."
