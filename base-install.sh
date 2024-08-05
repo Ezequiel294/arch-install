@@ -22,7 +22,7 @@ read -p "Enter the host name: " hostname
 
 # Set swap file if wanted
 read -p "Do you want to create a swap file? (Y/n): " answer
-if [[ $answer =~ ^[Yy]$ ]]; then
+if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     read -p "Enter the size of the swap file in GB: " swap_size
     echo -e "\nCreating swap file..."
     mkswap -U clear --size ${swap_size}G --file /swapfile
@@ -35,7 +35,7 @@ fi
 echo -e "\nTo set the time zone, you need to know your region and city."
 echo "You can find your region and city by running timedatectl list-timezones"
 read -p "Do you want to run 'timedatectl list-timezones'? (Y/n): " answer
-if [[ ${answer} =~ ^[Yy]$ ]]; then
+if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     timedatectl list-timezones
 fi
 read -p "Enter your region: " region
@@ -150,8 +150,8 @@ systemctl enable NetworkManager bluetooth
 echo "Services enabled."
 
 # Ask the user if they want to install the dotfiles
-read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (y/n): " install_dotfiles
-if [ "${install_dotfiles}" = "y" ] || [ "${install_dotfiles}" = "Y" ]; then
+read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " answer
+if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     echo -e "\nMoving to ${username}'s home directory..."
     cd /home/${username}
     echo -e "\nInstalling dotfiles..."
