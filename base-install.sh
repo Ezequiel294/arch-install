@@ -16,7 +16,7 @@ echo -e "You are root. Proceeding with installation...\n"
 read -sp "Enter the password for root: " root_password
 echo
 read -p "Enter the username you want to create: " username
-read -sp "Enter the password for $username: " user_password
+read -sp "Enter the password for ${username}: " user_password
 echo
 read -p "Enter the host name: " hostname
 
@@ -35,21 +35,21 @@ fi
 echo -e "\nTo set the time zone, you need to know your region and city."
 echo "You can find your region and city by running timedatectl list-timezones"
 read -p "Do you want to run 'timedatectl list-timezones'? (Y/n): " answer
-if [[ $answer =~ ^[Yy]$ ]]; then
+if [[ ${answer} =~ ^[Yy]$ ]]; then
     timedatectl list-timezones
 fi
 read -p "Enter your region: " region
 read -p "Enter your city: " city
 echo -e "\nSetting the time zone..."
-ln -sf /usr/share/zoneinfo/$region/$city /etc/localtime
+ln -sf /usr/share/zoneinfo/${region}/${city} /etc/localtime
 hwclock --systohc
 echo "Time zone set."
 
 # Set accounts
 echo -e "\nSetting up accounts..."
-echo "root:$root_password" | chpasswd
-useradd -mG wheel "$username"
-echo "$username:$user_password" | chpasswd
+echo "root:${root_password}" | chpasswd
+useradd -mG wheel "${username}"
+echo "${username}:${user_password}" | chpasswd
 echo "Accounts set."
 
 # Install necessary packages
@@ -72,7 +72,7 @@ echo "Pacman configured."
 echo -e "\nDetecting hardware..."
 # Detect VirtualBox
 is_virtualbox=$(grep -i "$1" /proc/scsi/scsi || echo "not found")
-if [ "$is_virtualbox" != "not found" ]; then
+if [ "${is_virtualbox}" != "not found" ]; then
     echo "VirtualBox environment detected. Installing VirtualBox Guest Additions..."
     pacman -S --needed --noconfirm virtualbox-guest-utils
     systemctl enable vboxservice.service
@@ -80,10 +80,10 @@ if [ "$is_virtualbox" != "not found" ]; then
 else
     echo "Physical hardware detected. Checking for specific hardware..."
     cpu_info=$(grep -m 1 'model name' /proc/cpuinfo)
-    if echo "$cpu_info" | grep -iq "intel"; then
+    if echo "${cpu_info}" | grep -iq "intel"; then
         echo "Intel CPU detected. Ensuring intel-ucode is installed..."
         pacman -S --needed --noconfirm intel-ucode
-    elif echo "$cpu_info" | grep -iq "amd"; then
+    elif echo "${cpu_info}" | grep -iq "amd"; then
         echo "AMD CPU detected. Installing AMD microcode..."
         pacman -S --needed --noconfirm amd-ucode
     else
@@ -92,13 +92,13 @@ else
 
     IFS=$'\n' # Change the Internal Field Separator to newline to correctly iterate over lines
     for gpu_info in $(lspci | grep -E "VGA|3D|2D"); do
-        if echo "$gpu_info" | grep -iq "nvidia"; then
+        if echo "${gpu_info}" | grep -iq "nvidia"; then
             echo "NVIDIA GPU detected. Installing drivers..."
             pacman -S --needed --noconfirm mesa nvidia-open nvidia-utils nvidia-settings
-        elif echo "$gpu_info" | grep -iq "amd"; then
+        elif echo "${gpu_info}" | grep -iq "amd"; then
             echo "AMD GPU detected. Installing drivers..."
             pacman -S --needed --noconfirm mesa vulkan-radeon vulkan-tools
-        elif echo "$gpu_info" | grep -iq "intel"; then
+        elif echo "${gpu_info}" | grep -iq "intel"; then
             echo "Intel GPU detected. Installing drivers..."
             pacman -S --needed --noconfirm mesa vulkan-intel vulkan-tools
         else
@@ -138,10 +138,10 @@ echo "GRUB configuration generated."
 
 # Network configuration
 echo -e "\nConfiguring network..."
-echo $hostname >/etc/hostname
+echo ${hostname} >/etc/hostname
 echo "127.0.0.1 localhost
 ::1       localhost
-127.0.1.1 $hostname.localhost $hostname" | tee /etc/hosts >/dev/null
+127.0.1.1 ${hostname}.localhost ${hostname}" | tee /etc/hosts >/dev/null
 echo "Network configured."
 
 # Enable services
@@ -151,13 +151,13 @@ echo "Services enabled."
 
 # Ask the user if they want to install the dotfiles
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (y/n): " install_dotfiles
-if [ "$install_dotfiles" = "y" ] || [ "$install_dotfiles" = "Y" ]; then
-    echo -e "\nMoving to $username's home directory..."
-    cd /home/$username
+if [ "${install_dotfiles}" = "y" ] || [ "${install_dotfiles}" = "Y" ]; then
+    echo -e "\nMoving to ${username}'s home directory..."
+    cd /home/${username}
     echo -e "\nInstalling dotfiles..."
-    su -c "git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles" $username
-    su -c "git --git-dir=/home/$username/.dotfiles/ --work-tree=/home/$username checkout --force" $username
-    echo "The script is located at /home/$username/Scripts/post-install.sh"
+    su -c "git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles" ${username}
+    su -c "git --git-dir=/home/${username}/.dotfiles/ --work-tree=/home/${username} checkout --force" ${username}
+    echo "The script is located at /home/${username}/Scripts/post-install.sh"
 else
     echo "Skipping dotfiles installation."
 fi
