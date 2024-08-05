@@ -27,7 +27,7 @@ if [[ $answer =~ ^[Yy]$ ]]; then
     echo -e "\nCreating swap file..."
     mkswap -U clear --size ${swap_size}G --file /swapfile
     swapon /swapfile
-    echo -e '\n/swapfile none swap defaults 0 0' | tee -a /etc/fstab
+    echo -e '/swapfile none swap defaults 0 0\n' | tee -a /etc/fstab
     echo "Swap file created."
 fi
 
