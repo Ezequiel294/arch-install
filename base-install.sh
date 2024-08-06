@@ -31,17 +31,13 @@ if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     echo "Swap file created."
 fi
 
-# Set timezone
-echo -e "\nTo set the time zone, you need to know your region and city."
-echo "You can find your region and city by running timedatectl list-timezones"
-read -p "Do you want to run 'timedatectl list-timezones'? (Y/n): " answer
-if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
-    timedatectl list-timezones
-fi
-read -p "Enter your region: " region
-read -p "Enter your city: " city
+# Set the time zone
+echo -e "\nTo set the time zone, you will use /sbin/tzselect."
+echo "This command will guide you through selecting your region and city."
+echo "Running /sbin/tzselect..."
+timezone=$(/sbin/tzselect)
 echo -e "\nSetting the time zone..."
-ln -sf /usr/share/zoneinfo/${region}/${city} /etc/localtime
+ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 hwclock --systohc
 echo "Time zone set."
 
