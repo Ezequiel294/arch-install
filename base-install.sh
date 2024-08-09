@@ -67,12 +67,16 @@ echo "Pacman configured."
 # Hardware detection and conditional package installation
 echo -e "\nDetecting hardware..."
 # Detect VirtualBox
-is_virtualbox=$(grep -i "$1" /proc/scsi/scsi || echo "not found")
-if [ "${is_virtualbox}" != "not found" ]; then
+if grep "VBOX" /proc/scsi/scsi; then
     echo "VirtualBox environment detected. Installing VirtualBox Guest Additions..."
     pacman -S --needed --noconfirm virtualbox-guest-utils
     systemctl enable vboxservice.service
     echo "VirtualBox Guest Additions installed."
+elif grep "QEMU" /proc/scsi/scsi; then
+    echo "QEMU environment detected. Installing QEMU Guest Agent..."
+    pacman -S --needed --noconfirm qemu-guest-agent
+    systemctl enable qemu-guest-agent
+    echo "QEMU Guest Agent installed."
 else
     echo "Physical hardware detected. Checking for specific hardware..."
     cpu_info=$(grep -m 1 'model name' /proc/cpuinfo)
