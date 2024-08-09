@@ -75,7 +75,6 @@ if grep "VBOX" /proc/scsi/scsi; then
 elif grep "QEMU" /proc/scsi/scsi; then
     echo "QEMU environment detected. Installing QEMU Guest Agent..."
     pacman -S --needed --noconfirm qemu-guest-agent
-    systemctl enable qemu-guest-agent
     echo "QEMU Guest Agent installed."
 else
     echo "Physical hardware detected. Checking for specific hardware..."
