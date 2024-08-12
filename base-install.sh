@@ -50,7 +50,7 @@ echo "Accounts set."
 
 # Install necessary packages
 echo -e "\nInstalling necessary packages..."
-pacman -S --noconfirm neovim reflector
+pacman -S --noconfirm reflector
 
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
@@ -111,7 +111,7 @@ fi
 
 # Install necessary packages
 echo -e "\nInstalling necessary packages..."
-pacman -S --needed --noconfirm base-devel grub efibootmgr os-prober networkmanager pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack bluez bluez-utils sudo
+pacman -S --needed --noconfirm base-devel grub efibootmgr os-prober networkmanager pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack bluez bluez-utils sudo nano vi
 echo "Packages installed."
 
 # Enable sudo
