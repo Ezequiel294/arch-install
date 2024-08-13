@@ -19,6 +19,7 @@ read -p "Enter the username you want to create: " username
 read -sp "Enter the password for ${username}: " user_password
 echo -e "\n"
 read -p "Enter the host name: " hostname
+echo -e "\n"
 
 # Set swap file if wanted
 read -p "Do you want to create a swap file? (Y/n): " answer
