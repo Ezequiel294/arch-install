@@ -120,7 +120,7 @@ cd /
 16. Run my script
 
 ```bash
-bash /root/arch-install/base-install.sh
+sh /root/arch-install/base-install.sh | tee -a /root/arch-install/base-install.log
 ```
 
 17. Exit your system
