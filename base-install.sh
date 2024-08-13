@@ -14,10 +14,10 @@ echo -e "You are root. Proceeding with installation...\n"
 
 # Set the root password, username, and hostname
 read -sp "Enter the password for root: " root_password
-echo
+echo -e "\n"
 read -p "Enter the username you want to create: " username
 read -sp "Enter the password for ${username}: " user_password
-echo
+echo -e "\n"
 read -p "Enter the host name: " hostname
 
 # Set swap file if wanted
@@ -109,13 +109,9 @@ else
     echo "Hardware detected and set up."
 fi
 
-# Install necessary packages
-echo -e "\nInstalling necessary packages..."
-pacman -S --needed --noconfirm base-devel grub efibootmgr os-prober networkmanager pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack bluez bluez-utils sudo nano vi
-echo "Packages installed."
-
 # Enable sudo
 echo -e "\nEnabling sudo..."
+pacman -S --noconfirm --needed sudo
 sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 echo "Sudo enabled."
 
@@ -128,6 +124,7 @@ echo "Locale set."
 
 # Grub installation
 echo -e "\nInstalling GRUB..."
+pacman -S --noconfirm --needed grub efibootmgr os-prober
 grub-install --verbose --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 echo "GRUB installed."
 echo -e "\nGenerating GRUB configuration..."
@@ -141,12 +138,25 @@ echo ${hostname} >/etc/hostname
 echo "127.0.0.1 localhost
 ::1       localhost
 127.0.1.1 ${hostname}.localhost ${hostname}" | tee /etc/hosts >/dev/null
+pacman -S --noconfirm --needed networkmanager
+systemctl enable NetworkManager.service
 echo "Network configured."
 
-# Enable services
-echo -e "\nEnabling services..."
-systemctl enable NetworkManager bluetooth
-echo "Services enabled."
+# Audio configuration
+echo -e "\nConfiguring audio..."
+pacman -S --noconfirm --needed alsa-firmware pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber
+echo "Audio configured."
+
+# Bluetooth configuration
+echo -e "\nConfiguring Bluetooth..."
+pacman -S --noconfirm --needed bluez bluez-utils blueman
+systemctl enable bluetooth.service
+echo "Bluetooth configured."
+
+# Install usfull packages
+echo -e "\nInstalling usfull packages..."
+pacman -S --needed --noconfirm base-devel fastfetch nano vi
+echo "Packages installed."
 
 # Ask the user if they want to install the dotfiles
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " answer
@@ -160,5 +170,9 @@ if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
 else
     echo "Skipping dotfiles installation."
 fi
+
+# Run Fastfetch
+echo -e "\n"
+fastfetch
 
 echo -e "\nInstallation complete. Please reboot the system."
