@@ -175,4 +175,4 @@ fi
 # Run Fastfetch
 fastfetch
 
-echo -e "\nInstallation complete. Please reboot the system."
+echo -e "\nInstallation complete. The output of the installation can be found at /root/arch-install/base-install.log"
