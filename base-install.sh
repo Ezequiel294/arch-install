@@ -156,8 +156,8 @@ echo "Bluetooth configured."
 
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
-pacman -S --needed --noconfirm base-devel fastfetch nano vi
-echo "Packages installed."
+pacman -S --needed --noconfirm base-devel fastfetch nano vim
+echo -e "Packages installed.\n"
 
 # Ask the user if they want to install the dotfiles
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " answer
@@ -167,13 +167,12 @@ if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     echo -e "\nInstalling dotfiles..."
     su -c "git clone --bare https://github.com/Ezequiel294/dotfiles .dotfiles" ${username}
     su -c "git --git-dir=/home/${username}/.dotfiles/ --work-tree=/home/${username} checkout --force" ${username}
-    echo "The script is located at /home/${username}/Scripts/post-install.sh"
+    echo -e "The script is located at /home/${username}/Scripts/post-install.sh\n"
 else
-    echo "Skipping dotfiles installation."
+    echo -e "Skipping dotfiles installation.\n"
 fi
 
 # Run Fastfetch
-echo -e "\n"
 fastfetch
 
 echo -e "\nInstallation complete. Please reboot the system."
