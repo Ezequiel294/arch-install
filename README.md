@@ -1,5 +1,6 @@
 # Index
 
+- [Index](#index)
 - [Overview](#overview)
 - [List of Requirements](#list-of-requirements)
 - [Arch Installation](#arch-installation)
@@ -19,7 +20,7 @@ The following instructions are a guide to installing and configuring Arch. Befor
 - 64-bit computer Using UEFI
 - Keyboard and Mouse
 - At least 2GB of available RAM Memory
-- At least 16GB of available storage
+- At least 8GB of available storage (this is the minimum for the OS, probably want more than this for personal files and apps)
 
 # Arch Installation
 
@@ -42,20 +43,19 @@ The following instructions are a guide to installing and configuring Arch. Befor
 setfont ter-132b
 ```
 
-5. Display block devices
+5. Display block devices to see the name of your disks and partition
 
 ```bash
 lsblk
 ```
 
+> [!NOTE]
+> Highly recomended to use the arch wiki for this following part as it can vary a lot depending on the users needs and harware.
 6. Make the disk partitions
 
 ```bash
-cfdisk
+fdisk /dev/disk
 ```
-> [!NOTE]
-> If more than one disk is available, you should select the correct disk to partition: cfdisk /dev/*disk*
-
 
 7. Format the partitions with the following commands with the following format:
 mkfs.*format* /dev/*partition*
@@ -75,7 +75,7 @@ the EFI should have a FAT32 format, the root can have your preferred format, and
 ping google.com
 ```
 
-If not, use the "iw" tool with the following command
+If not, you probably aren't using ethernet and want to use wifi. Use the "iw" tool with the following command and read the arch wiki for command instruction.
 
 ```bash
 iwctl
@@ -111,7 +111,7 @@ cd /root
 git clone https://github.com/Ezequiel294/arch-install
 ```
 
-15. Move back to root
+15. Move back to the root directory
 
 ```bash
 cd /
@@ -122,6 +122,8 @@ cd /
 ```bash
 sh /root/arch-install/base-install.sh | tee -a /root/arch-install/base-install.log
 ```
+> [!NOTE]
+> the pipe with the tee command is to generate a log file with all the ouput of the installation for the user to check if everything was correctly installed. However, it is not required and can be omited.
 
 17. Exit your system
 
@@ -144,4 +146,3 @@ shutdown now
 22. Login with your user
 
 23. Enjoy your new Arch Linux installation
-
