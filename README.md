@@ -120,10 +120,8 @@ cd /
 16. Run my script
 
 ```bash
-sh /root/arch-install/base-install.sh | tee -a /root/arch-install/base-install.log
+sh /root/arch-install/base-install.sh
 ```
-> [!NOTE]
-> the pipe with the tee command is to generate a log file with all the ouput of the installation for the user to check if everything was correctly installed. However, it is not required and can be omited.
 
 17. Exit your system
 
