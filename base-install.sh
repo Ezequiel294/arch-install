@@ -28,7 +28,7 @@ if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     echo -e "\nCreating swap file..."
     mkswap -U clear --size ${swap_size}G --file /swapfile
     swapon /swapfile
-    echo -e '/swapfile none swap defaults 0 0\n' | tee -a /etc/fstab
+    echo -e '/swapfile none swap defaults 0 0\n' >> /etc/fstab
     echo "Swap file created."
 fi
 
@@ -49,19 +49,17 @@ useradd -mG wheel "${username}"
 echo "${username}:${user_password}" | chpasswd
 echo "Accounts set."
 
-# Install necessary packages
-echo -e "\nInstalling necessary packages..."
-pacman -S --noconfirm reflector
-
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
+echo "Installing reflector to update mirrorlist..."
+pacman -S --noconfirm reflector
 sed -i '/#Color/s/^#//' /etc/pacman.conf
 sed -i '/#ParallelDownloads/s/^#//' /etc/pacman.conf
 if ! grep -q '^ILoveCandy' /etc/pacman.conf; then
     sed -i '/\[options\]/a ILoveCandy' /etc/pacman.conf
 fi
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --verbose --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+reflector --verbose --latest 25 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syy
 echo "Pacman configured."
 
