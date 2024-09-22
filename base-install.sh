@@ -152,9 +152,23 @@ pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
 echo "Bluetooth configured."
 
+# Ask the user if they want to use the nix package manager instead of yay or paru
+read -p "Do you want to use the nix package manager instead of yay or paru? (Y/n): " answer
+if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
+    echo -e "\nInstalling nix package manager..."
+    pacman -S --needed --noconfirm nix
+    systemctl enable nix-daemon.service
+    usermod -aG nix-users ${username}
+    su -c "nix-channel --add https://nixos.org/channels/nixpkgs-unstable" ${username}
+    su -c "nix-channel --update" ${username}
+    echo -e "\nNix package manager installed."
+else
+    echo -e "\nSkipping nix package manager installation"
+fi
+
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
-pacman -S --needed --noconfirm base-devel fastfetch nano vim
+pacman -S --needed --noconfirm base-devel fastfetch vim
 echo -e "Packages installed.\n"
 
 # Ask the user if they want to install the dotfiles
