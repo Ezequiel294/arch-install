@@ -159,8 +159,8 @@ if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     pacman -S --needed --noconfirm nix
     systemctl enable nix-daemon.service
     usermod -aG nix-users ${username}
-    su -c "nix-channel --add https://nixos.org/channels/nixpkgs-unstable" ${username}
-    su -c "nix-channel --update" ${username}
+    su -c "sudo nix-channel --add https://nixos.org/channels/nixpkgs-unstable" ${username}
+    su -c "sudo nix-channel --update" ${username}
     echo -e "\nNix package manager installed."
 else
     echo -e "\nSkipping nix package manager installation"
