@@ -153,14 +153,14 @@ systemctl enable bluetooth.service
 echo "Bluetooth configured."
 
 # Ask the user if they want to use the nix package manager instead of yay or paru
-read -p "Do you want to use the nix package manager instead of yay or paru? (Y/n): " answer
+read -p "\nDo you want to use the nix package manager instead of the AUR? (Y/n): " answer
 if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
     echo -e "\nInstalling nix package manager..."
     pacman -S --needed --noconfirm nix
     systemctl enable nix-daemon.service
     usermod -aG nix-users ${username}
-    su -c "sudo nix-channel --add https://nixos.org/channels/nixpkgs-unstable" ${username}
-    su -c "sudo nix-channel --update" ${username}
+    nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+    nix-channel --update
     echo -e "\nNix package manager installed."
 else
     echo -e "\nSkipping nix package manager installation"
