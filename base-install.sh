@@ -31,6 +31,16 @@ fi
 echo -e "\n"
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
 
+# Set the time zone
+echo -e "\nTo set the time zone, you will use /sbin/tzselect."
+echo "This command will guide you through selecting your region and city."
+echo "Running /sbin/tzselect..."
+timezone=$(/sbin/tzselect)
+echo -e "\nSetting the time zone..."
+ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
+hwclock --systohc
+echo "Time zone set."
+
 # Set swap file if wanted
 if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
     echo -e "\nCreating swap file..."
@@ -48,16 +58,6 @@ echo "root:${root_password}" | chpasswd
 useradd -mG wheel "${username}"
 echo "${username}:${user_password}" | chpasswd
 echo "Accounts set."
-
-# Set the time zone
-echo -e "\nTo set the time zone, you will use /sbin/tzselect."
-echo "This command will guide you through selecting your region and city."
-echo "Running /sbin/tzselect..."
-timezone=$(/sbin/tzselect)
-echo -e "\nSetting the time zone..."
-ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
-hwclock --systohc
-echo "Time zone set."
 
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
