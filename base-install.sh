@@ -21,16 +21,33 @@ echo -e "\n"
 read -p "Enter the host name: " hostname
 echo -e "\n"
 
-# Set swap file if wanted
-read -p "Do you want to create a swap file? (Y/n): " answer
-if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
+# Ask for swap to file
+read -p "Do you want to create a swap file? (Y/n): " swap
+if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
     read -p "Enter the size of the swap file in GB: " swap_size
+fi
+
+# Ask if the user wants to install my dotfiles
+echo -e "\n"
+read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
+
+# Set swap file if wanted
+if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
     echo -e "\nCreating swap file..."
     mkswap -U clear --size ${swap_size}G --file /swapfile
     swapon /swapfile
     echo -e '/swapfile none swap defaults 0 0\n' >> /etc/fstab
     echo "Swap file created."
+else
+    echo -e "Skipping swap file creation.\n"
 fi
+
+# Set accounts
+echo -e "\nSetting up accounts..."
+echo "root:${root_password}" | chpasswd
+useradd -mG wheel "${username}"
+echo "${username}:${user_password}" | chpasswd
+echo "Accounts set."
 
 # Set the time zone
 echo -e "\nTo set the time zone, you will use /sbin/tzselect."
@@ -41,13 +58,6 @@ echo -e "\nSetting the time zone..."
 ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 hwclock --systohc
 echo "Time zone set."
-
-# Set accounts
-echo -e "\nSetting up accounts..."
-echo "root:${root_password}" | chpasswd
-useradd -mG wheel "${username}"
-echo "${username}:${user_password}" | chpasswd
-echo "Accounts set."
 
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
@@ -152,28 +162,13 @@ pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
 echo "Bluetooth configured."
 
-# Ask the user if they want to use the nix package manager instead of yay or paru
-read -p "\nDo you want to use the nix package manager instead of the AUR? (Y/n): " answer
-if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
-    echo -e "\nInstalling nix package manager..."
-    pacman -S --needed --noconfirm nix
-    systemctl enable nix-daemon.service
-    usermod -aG nix-users ${username}
-    nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-    nix-channel --update
-    echo -e "\nNix package manager installed."
-else
-    echo -e "\nSkipping nix package manager installation"
-fi
-
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
 pacman -S --needed --noconfirm base-devel fastfetch vim
 echo -e "Packages installed.\n"
 
-# Ask the user if they want to install the dotfiles
-read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " answer
-if [[ -z "${answer}" || "${answer}" =~ ^[Yy]$ ]]; then
+# Install my dotfiles if wanted by the user
+if [[ -z "${dotfiles}" || "${dotfiles}" =~ ^[Yy]$ ]]; then
     echo -e "\nMoving to ${username}'s home directory..."
     cd /home/${username}
     echo -e "\nInstalling dotfiles..."
