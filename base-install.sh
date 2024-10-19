@@ -21,16 +21,6 @@ echo -e "\n"
 read -p "Enter the host name: " hostname
 echo -e "\n"
 
-# Ask for swap to file
-read -p "Do you want to create a swap file? (Y/n): " swap
-if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
-    read -p "Enter the size of the swap file in GB: " swap_size
-fi
-
-# Ask if the user wants to install my dotfiles
-echo -e "\n"
-read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
-
 # Set the time zone
 echo -e "\nTo set the time zone, you will use /sbin/tzselect."
 echo "This command will guide you through selecting your region and city."
@@ -40,6 +30,16 @@ echo -e "\nSetting the time zone..."
 ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 hwclock --systohc
 echo "Time zone set."
+
+# Ask for swap to file
+read -p "Do you want to create a swap file? (Y/n): " swap
+if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
+    read -p "Enter the size of the swap file in GB: " swap_size
+fi
+
+# Ask if the user wants to install my dotfiles
+echo -e "\n"
+read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
 
 # Set swap file if wanted
 if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
