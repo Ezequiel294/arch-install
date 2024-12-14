@@ -162,6 +162,13 @@ pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
 echo -e "Bluetooth configured.\n"
 
+# Install Nix package manager
+echo -e "\nInstalling nix package manager..."
+pacman -S --needed --noconfirm nix
+systemctl enable nix-daemon.service
+usermod -aG nix-users ${username}
+echo -e "Nix package manager installed.\n"
+
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
 pacman -S --needed --noconfirm base-devel fastfetch vim
