@@ -169,6 +169,16 @@ systemctl enable nix-daemon.service
 usermod -aG nix-users ${username}
 echo -e "Nix package manager installed.\n"
 
+# Set environment variables
+echo -e "\nSetting environment variables..."
+echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
+echo 'GTK_THEME="Breeze-Dark"' | sudo tee -a /etc/environment
+echo "NIXPKGS_ALLOW_UNFREE=1" | sudo tee -a /etc/environment
+echo "EDITOR=nvim" | sudo tee -a /etc/environment
+echo "VISUAL=nvim" | sudo tee -a /etc/environment
+echo "TERM=kitty" | sudo tee -a /etc/environment
+echo -e "Environment variables have been set\n"
+
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
 pacman -S --needed --noconfirm base-devel fastfetch vim
