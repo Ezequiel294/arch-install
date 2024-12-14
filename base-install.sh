@@ -29,7 +29,7 @@ timezone=$(/sbin/tzselect)
 echo -e "\nSetting the time zone..."
 ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 hwclock --systohc
-echo "Time zone set."
+echo -e "Time zone set.\n"
 
 # Ask for swap to file
 read -p "Do you want to create a swap file? (Y/n): " swap
@@ -57,7 +57,7 @@ echo -e "\nSetting up accounts..."
 echo "root:${root_password}" | chpasswd
 useradd -mG wheel "${username}"
 echo "${username}:${user_password}" | chpasswd
-echo "Accounts set."
+echo -e "Accounts set.\n"
 
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
@@ -71,7 +71,7 @@ fi
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 reflector --verbose --latest 25 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syy
-echo "Pacman configured."
+echo -e "Pacman configured.\n"
 
 # Hardware detection and conditional package installation
 echo -e "\nDetecting hardware..."
@@ -115,21 +115,21 @@ else
     done
     IFS=' ' # Reset the Internal Field Separator to default
 
-    echo "Hardware detected and set up."
+    echo -e "Hardware detected and set up.\n"
 fi
 
 # Enable sudo
 echo -e "\nEnabling sudo..."
 pacman -S --noconfirm --needed sudo
 sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
-echo "Sudo enabled."
+echo -e "Sudo enabled.\n"
 
 # Set the locale
 echo -e "\nSetting english UTF-8 locale..."
 sed -i '/^#en_US.UTF-8 UTF-8/s/^#//' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" >/etc/locale.conf
-echo "Locale set."
+echo -e "Locale set.\n"
 
 # Grub installation
 echo -e "\nInstalling GRUB..."
@@ -139,7 +139,7 @@ echo "GRUB installed."
 echo -e "\nGenerating GRUB configuration..."
 sed -i '$ s/^#//' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
-echo "GRUB configuration generated."
+echo -e "GRUB configuration generated.\n"
 
 # Network configuration
 echo -e "\nConfiguring network..."
@@ -149,18 +149,18 @@ echo "127.0.0.1 localhost
 127.0.1.1 ${hostname}.localhost ${hostname}" | tee /etc/hosts >/dev/null
 pacman -S --noconfirm --needed networkmanager
 systemctl enable NetworkManager.service
-echo "Network configured."
+echo -e "Network configured.\n"
 
 # Audio configuration
 echo -e "\nConfiguring audio..."
 pacman -S --noconfirm --needed alsa-firmware pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber
-echo "Audio configured."
+echo -e "Audio configured.\n"
 
 # Bluetooth configuration
 echo -e "\nConfiguring Bluetooth..."
 pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
-echo "Bluetooth configured."
+echo -e "Bluetooth configured.\n"
 
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
@@ -182,4 +182,4 @@ fi
 # Run Fastfetch
 fastfetch
 
-echo -e "\nInstallation complete."
+echo -e "\nInstallation complete.\n"
