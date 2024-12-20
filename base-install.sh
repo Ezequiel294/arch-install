@@ -21,16 +21,6 @@ echo -e "\n"
 read -p "Enter the host name: " hostname
 echo -e "\n"
 
-# Set the time zone
-echo -e "\nTo set the time zone, you will use /sbin/tzselect."
-echo "This command will guide you through selecting your region and city."
-echo "Running /sbin/tzselect..."
-timezone=$(/sbin/tzselect)
-echo -e "\nSetting the time zone..."
-ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
-hwclock --systohc
-echo -e "Time zone set.\n"
-
 # Ask for swap to file
 read -p "Do you want to create a swap file? (Y/n): " swap
 if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
@@ -40,6 +30,17 @@ fi
 # Ask if the user wants to install my dotfiles
 echo -e "\n"
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
+echo -e "\n"
+
+# Set the time zone
+echo -e "\nTo set the time zone, you will use /sbin/tzselect."
+echo "This command will guide you through selecting your region and city."
+echo "Running /sbin/tzselect..."
+timezone=$(/sbin/tzselect)
+echo -e "\nSetting the time zone..."
+ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
+hwclock --systohc
+echo -e "Time zone set.\n"
 
 # Set swap file if wanted
 if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
@@ -61,7 +62,7 @@ echo -e "Accounts set.\n"
 
 # Pacman configuration
 echo -e "\nConfiguring pacman..."
-echo "Installing reflector to update mirrorlist..."
+echo "Installing reflector"
 pacman -S --noconfirm reflector
 sed -i '/#Color/s/^#//' /etc/pacman.conf
 sed -i '/#ParallelDownloads/s/^#//' /etc/pacman.conf
@@ -69,7 +70,7 @@ if ! grep -q '^ILoveCandy' /etc/pacman.conf; then
     sed -i '/\[options\]/a ILoveCandy' /etc/pacman.conf
 fi
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --verbose --latest 25 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+#reflector --verbose --latest 25 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syy
 echo -e "Pacman configured.\n"
 
@@ -162,18 +163,10 @@ pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
 echo -e "Bluetooth configured.\n"
 
-# Install Nix package manager
-echo -e "\nInstalling nix package manager..."
-pacman -S --needed --noconfirm nix
-systemctl enable nix-daemon.service
-usermod -aG nix-users ${username}
-echo -e "Nix package manager installed.\n"
-
 # Set environment variables
 echo -e "\nSetting environment variables..."
 echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
 echo 'GTK_THEME="Breeze-Dark"' | sudo tee -a /etc/environment
-echo "NIXPKGS_ALLOW_UNFREE=1" | sudo tee -a /etc/environment
 echo "EDITOR=nvim" | sudo tee -a /etc/environment
 echo "VISUAL=nvim" | sudo tee -a /etc/environment
 echo "TERM=kitty" | sudo tee -a /etc/environment
