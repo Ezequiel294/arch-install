@@ -40,6 +40,7 @@ timezone=$(/sbin/tzselect)
 echo -e "\nSetting the time zone..."
 ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 hwclock --systohc
+timedatectl set-ntp true
 echo -e "Time zone set.\n"
 
 # Set swap file if wanted
