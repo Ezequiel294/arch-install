@@ -168,6 +168,7 @@ echo -e "Bluetooth configured.\n"
 echo -e "\nSetting environment variables..."
 echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
 echo 'GTK_THEME="Breeze-Dark"' | sudo tee -a /etc/environment
+echo "BROWSER=firefox-developer-edition" | sudo tee -a /etc/environment
 echo "EDITOR=nvim" | sudo tee -a /etc/environment
 echo "VISUAL=nvim" | sudo tee -a /etc/environment
 echo "TERM=kitty" | sudo tee -a /etc/environment
