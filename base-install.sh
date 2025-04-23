@@ -104,10 +104,21 @@ if grep "VBOX" /proc/scsi/scsi; then
     pacman -S --needed --noconfirm virtualbox-guest-utils
     systemctl enable vboxservice.service
     echo "VirtualBox Guest Additions installed."
+# Detect QEMU
 elif grep "QEMU" /proc/scsi/scsi; then
     echo "QEMU environment detected. Installing QEMU Guest Agent..."
     pacman -S --needed --noconfirm qemu-guest-agent
     echo "QEMU Guest Agent installed."
+# Detect VMWare
+elif [[ "$(systemd-detect-virt)" == "vmware" ]] || grep -q "VMware" /sys/class/dmi/id/sys_vendor; then
+    echo "Configuring VMware guest tools and drivers..."
+    pacman -S --noconfirm --needed open-vm-tools xf86-video-vmware xf86-input-vmmouse gtkmm3 libxtst mesa lib32-mesa
+    systemctl enable vmtoolsd.service vmware-vmblock-fuse.service
+    cat <<EOF > /etc/vmware-tools/tools.conf
+[resolutionKMS]
+enable = true
+EOF
+    echo "VMware guest configuration complete."
 else
     echo "Physical hardware detected. Checking for specific hardware..."
     cpu_info=$(grep -m 1 'model name' /proc/cpuinfo)
