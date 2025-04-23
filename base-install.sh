@@ -112,7 +112,7 @@ elif grep "QEMU" /proc/scsi/scsi; then
 # Detect VMWare
 elif [[ "$(systemd-detect-virt)" == "vmware" ]] || grep -q "VMware" /sys/class/dmi/id/sys_vendor; then
     echo "Configuring VMware guest tools and drivers..."
-    pacman -S --noconfirm --needed open-vm-tools xf86-video-vmware xf86-input-vmmouse gtkmm3 libxtst mesa lib32-mesa
+    pacman -S --noconfirm --needed open-vm-tools xf86-video-vmware xf86-input-vmmouse gtkmm3 libxtst mesa
     systemctl enable vmtoolsd.service vmware-vmblock-fuse.service
     cat <<EOF > /etc/vmware-tools/tools.conf
 [resolutionKMS]
