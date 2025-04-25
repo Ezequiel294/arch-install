@@ -15,6 +15,7 @@ echo -e "You are root. Proceeding with installation...\n"
 # Set the root password, username, and hostname
 while true; do
     read -sp "Enter the password for root: " root_password
+    echo -e "\n"
     read -sp "Repeat the password for root: " root_password_repeat
     if [ "$root_password" = "$root_password_repeat" ]; then
         break
@@ -28,6 +29,7 @@ read -p "Enter the username you want to create: " username
 
 while true; do
     read -sp "Enter the password for ${username}: " user_password
+    echo -e "\n"
     read -sp "Repeat the password for ${username}: " user_password_repeat
     if [ "$user_password" = "$user_password_repeat" ]; then
         break
@@ -38,7 +40,6 @@ done
 
 echo -e "\n"
 read -p "Enter the host name: " hostname
-echo -e "\n"
 
 # Ask for swap to file
 read -p "Do you want to create a swap file? (Y/n): " swap
@@ -47,12 +48,10 @@ if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
 fi
 
 # Ask if the user wants to install my dotfiles
-echo -e "\n"
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
-echo -e "\n"
 
 # Set the time zone
-echo -e "\nTo set the time zone, you will use /sbin/tzselect."
+echo -e "To set the time zone, you will use /sbin/tzselect."
 echo "This command will guide you through selecting your region and city."
 echo "Running /sbin/tzselect..."
 timezone=$(/sbin/tzselect)
