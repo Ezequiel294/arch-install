@@ -40,6 +40,7 @@ done
 
 echo -e "\n"
 read -p "Enter the host name: " hostname
+echo -e "\n"
 
 # Ask for swap to file
 read -p "Do you want to create a swap file? (Y/n): " swap
@@ -48,10 +49,11 @@ if [[ -z "${swap}" || "${swap}" =~ ^[Yy]$ ]]; then
 fi
 
 # Ask if the user wants to install my dotfiles
+echo -e "\n"
 read -p "Do you want to install the dotfiles from https://github.com/Ezequiel294/dotfiles? (Y/n): " dotfiles
 
 # Set the time zone
-echo -e "To set the time zone, you will use /sbin/tzselect."
+echo -e "\nTo set the time zone, you will use /sbin/tzselect."
 echo "This command will guide you through selecting your region and city."
 echo "Running /sbin/tzselect..."
 timezone=$(/sbin/tzselect)
