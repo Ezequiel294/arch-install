@@ -15,30 +15,28 @@ echo -e "You are root. Proceeding with installation...\n"
 # Set the root password, username, and hostname
 while true; do
     read -sp "Enter the password for root: " root_password
-    echo -e "\n"
     read -sp "Repeat the password for root: " root_password_repeat
-    echo -e "\n"
     if [ "$root_password" = "$root_password_repeat" ]; then
         break
     else
-        echo "Passwords do not match. Please try again."
+        echo -e "\nPasswords do not match. Please try again.\n"
     fi
 done
 
+echo -e "\n"
 read -p "Enter the username you want to create: " username
 
 while true; do
     read -sp "Enter the password for ${username}: " user_password
-    echo -e "\n"
     read -sp "Repeat the password for ${username}: " user_password_repeat
-    echo -e "\n"
     if [ "$user_password" = "$user_password_repeat" ]; then
         break
     else
-        echo "Passwords do not match. Please try again."
+        echo -e "\nPasswords do not match. Please try again.\n"
     fi
 done
 
+echo -e "\n"
 read -p "Enter the host name: " hostname
 echo -e "\n"
 
