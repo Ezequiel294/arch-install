@@ -195,16 +195,6 @@ pacman -S --noconfirm --needed bluez bluez-utils blueman
 systemctl enable bluetooth.service
 echo -e "Bluetooth configured.\n"
 
-# Set environment variables
-echo -e "\nSetting environment variables..."
-echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
-echo 'GTK_THEME="Breeze-Dark"' | sudo tee -a /etc/environment
-echo "BROWSER=firefox-developer-edition" | sudo tee -a /etc/environment
-echo "EDITOR=nvim" | sudo tee -a /etc/environment
-echo "VISUAL=nvim" | sudo tee -a /etc/environment
-echo "TERM=kitty" | sudo tee -a /etc/environment
-echo -e "Environment variables have been set\n"
-
 # Install usfull packages
 echo -e "\nInstalling usfull packages..."
 pacman -S --needed --noconfirm base-devel fastfetch vim
